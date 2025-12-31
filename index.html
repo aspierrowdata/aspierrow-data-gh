@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aspierrow Data GH</title>
+<style>
+body { margin:0; font-family:Arial,sans-serif; background:#f4f6f8; }
+header { background:#0d6efd; color:#fff; padding:15px; text-align:center; }
+.container { padding:15px; }
+.card { background:#fff; border-radius:10px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,.1); }
+button { width:100%; padding:12px; background:#0d6efd; color:#fff; border:none; border-radius:8px; font-size:16px; cursor:pointer; }
+input, select { width:100%; padding:10px; margin:8px 0 12px; border-radius:6px; border:1px solid #ccc; }
+.hidden { display:none; }
+.price { display:flex; justify-content:space-between; margin:6px 0; }
+.admin { background:#fff3cd; }
+.whatsapp { position:fixed; bottom:20px; right:20px; background:#25d366; color:#fff; padding:14px; border-radius:50%; font-size:22px; text-decoration:none; }
+</style>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+
+<body>
+
+<header>
+  <h2>Aspierrow Data GH</h2>
+  <small>Affordable • Fast • Reliable</small>
+</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div class="card" id="loginBox">
+  <h3>Login</h3>
+  <input type="text" placeholder="Username or Email">
+  <input type="password" placeholder="Password">
+  <button onclick="login()">Sign In</button>
+  <p style="text-align:center;">New Agent? <a href="#" onclick="showRegister()">Register</a></p>
+</div>
+
+<!-- AGENT DASHBOARD -->
+<div class="card hidden" id="agentBox">
+  <h3>Agent Dashboard</h3>
+  <p><b>Balance:</b> GHS 0.00</p>
+
+  <h4>Place Order</h4>
+
+  <select id="network" onchange="updatePackages()">
+    <option value="MTN">MTN</option>
+    <option value="AirtelTigo">AIRTEL TIGO</option>
+    <option value="Telecel">TELECEL</option>
+  </select>
+
+  <input id="phone" type="text" placeholder="Beneficiary Phone Number">
+
+  <select id="package"></select>
+
+  <button onclick="payWithPaystack()">Pay & Submit Order</button>
+
+  <h4>📜 Order History</h4>
+  <div id="orderList"></div>
+
+  <br>
+  <button style="background:#dc3545" onclick="logout()">Logout</button>
+</div>
+
+<!-- REGISTER -->
+<div class="card hidden" id="registerBox">
+  <h3>Agent Registration</h3>
+  <input type="text" placeholder="Full Name">
+  <input type="text" placeholder="Phone Number">
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Password">
+  <button onclick="register()">Register</button>
+</div>
+
+<!-- PAYMENT INFO -->
+<div class="card">
+  <h3>💰 Payment (Paystack)</h3>
+  <p>After selecting package, click "Pay & Submit Order" to make payment.</p>
+</div>
+
+<!-- ADMIN -->
+<div class="card admin">
+  <h3>🔐 Admin Panel (Basic)</h3>
+  <p>Total Orders Today: <span id="totalOrders">0</span></p>
+  <p>Total Agents: <span id="totalAgents">0</span></p>
+  <p style="font-size:13px">
+    *This is a starter admin view. Full automation requires backend setup later.
+  </p>
+</div>
+
+</div>
+
+<a class="whatsapp" href="https://wa.me/233591467262" target="_blank">💬</a>
+
+<script>
+// DATA BUNDLES
+const dataBundles = {
+  MTN: [
+    {name:"1GB", price:5.5},{name:"2GB", price:11},{name:"3GB", price:16},{name:"4GB", price:22},
+    {name:"5GB", price:26},{name:"10GB", price:49},{name:"15GB", price:70},{name:"20GB", price:90}
+  ],
+  Telecel: [
+    {name:"5GB", price:26},{name:"10GB", price:45},{name:"15GB", price:70},{name:"20GB", price:75},
+    {name:"25GB", price:110},{name:"30GB", price:130},{name:"40GB", price:170},{name:"50GB", price:210}
+  ],
+  AirtelTigo: [
+    {name:"1GB", price:5},{name:"2GB", price:10},{name:"3GB", price:15},{name:"4GB", price:20},
+    {name:"5GB", price:25},{name:"10GB", price:45},{name:"15GB", price:65},{name:"20GB", price:80}
+  ]
+};
+
+// LOGIN/LOGOUT
+function login(){document.getElementById("loginBox").classList.add("hidden");document.getElementById("agentBox").classList.remove("hidden");updatePackages();loadOrders();}
+function logout(){document.getElementById("agentBox").classList.add("hidden");document.getElementById("loginBox").classList.remove("hidden");}
+
+// REGISTER
+function showRegister(){document.getElementById("loginBox").classList.add("hidden");document.getElementById("registerBox").classList.remove("hidden");}
+function register(){alert("Registration successful. Login now.");document.getElementById("registerBox").classList.add("hidden");document.getElementById("loginBox").classList.remove("hidden");}
+
+// UPDATE PACKAGE DROPDOWN
+function updatePackages(){
+  const network = document.getElementById("network").value;
+  const packageSelect = document.getElementById("package");
+  packageSelect.innerHTML = "";
+  dataBundles[network].forEach(b => {
+    packageSelect.innerHTML += `<option value="${b.name}" data-price="${b.price}">${b.name} - GH₵ ${b.price}</option>`;
+  });
+}
+
+// PAYSTACK PAYMENT & ORDER
+function payWithPaystack(){
+  const network = document.getElementById("network").value;
+  const phone = document.getElementById("phone").value;
+  const packageSelect = document.getElementById("package");
+  const packageOption = packageSelect.value;
+  const price = packageSelect.selectedOptions[0].dataset.price;
+
+  if(!phone){alert("Please enter phone number"); return;}
+
+  let handler = PaystackPop.setup({
+    key: 'pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e', // Replace with your Paystack public key
+    email: 'customer@example.com', // Can be dynamically entered
+    amount: price * 100, // Paystack expects amount in kobo
+    currency: "GHS",
+    ref: 'TX'+Math.floor(Math.random() * 1000000000),
+    onClose: function(){ alert('Payment cancelled.'); },
+    callback: function(response){
+      alert('Payment successful. Ref: ' + response.reference);
+      saveOrder(network, phone, packageOption);
+    }
+  });
+  handler.openIframe();
+}
+
+// SAVE ORDER IN LOCALSTORAGE
+function saveOrder(network, phone, packageOption){
+  let order = {network, phone, package: packageOption, date: new Date().toLocaleString()};
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  orders.push(order);
+  localStorage.setItem("orders", JSON.stringify(orders));
+  loadOrders();
+  // Send WhatsApp notification
+  const msg = `Hello Aspierrow Data GH,%0AOrder Details:%0ANetwork: ${network}%0APackage: ${packageOption}%0APhone: ${phone}`;
+  window.open(`https://wa.me/233591467262?text=${msg}`,"_blank");
+  document.getElementById("phone").value = "";
+}
+
+// LOAD ORDER HISTORY
+function loadOrders(){
+  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const list = document.getElementById("orderList");
+  list.innerHTML = "";
+  orders.reverse().forEach(o=>{
+    list.innerHTML += `<div style="border-bottom:1px solid #ddd;padding:8px 0"><b>${o.network}</b> - ${o.package}<br>${o.phone}<br><small>${o.date}</small></div>`;
+  });
+  document.getElementById("totalOrders").innerText = orders.length;
+}
+</script>
+
+</body>
+</html>
