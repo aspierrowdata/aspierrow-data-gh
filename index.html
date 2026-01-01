@@ -4,178 +4,258 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aspierrow Data GH</title>
-<style>
-body { margin:0; font-family:Arial,sans-serif; background:#f4f6f8; }
-header { background:#0d6efd; color:#fff; padding:15px; text-align:center; }
-.container { padding:15px; }
-.card { background:#fff; border-radius:10px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,.1); }
-button { width:100%; padding:12px; background:#0d6efd; color:#fff; border:none; border-radius:8px; font-size:16px; cursor:pointer; }
-input, select { width:100%; padding:10px; margin:8px 0 12px; border-radius:6px; border:1px solid #ccc; }
-.hidden { display:none; }
-.price { display:flex; justify-content:space-between; margin:6px 0; }
-.admin { background:#fff3cd; }
-.whatsapp { position:fixed; bottom:20px; right:20px; background:#25d366; color:#fff; padding:14px; border-radius:50%; font-size:22px; text-decoration:none; }
-</style>
+
 <script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+body{margin:0;font-family:Arial;background:#f4f6f8}
+header{background:#0d6efd;color:#fff;padding:15px;text-align:center}
+.container{max-width:700px;margin:auto;padding:15px}
+.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+button{padding:10px;border:none;border-radius:6px;cursor:pointer}
+.primary{background:#0d6efd;color:#fff}
+.success{background:#198754;color:#fff}
+.warning{background:#ffc107;color:#000}
+.danger{background:#dc3545;color:#fff}
+input,select{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc}
+.hidden{display:none}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid #ddd;font-size:14px}
+.status{padding:4px 8px;border-radius:6px;font-size:12px}
+.DELIVERED{background:#198754;color:#fff}
+.PENDING{background:#ffc107;color:#000}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h2>Aspierrow Data GH</h2>
-  <small>Affordable • Fast • Reliable</small>
+<h2>Aspierrow Data GH</h2>
+<small>Affordable • Fast • Reliable</small>
 </header>
 
 <div class="container">
 
+<!-- LANDING -->
+<div class="card" id="landing">
+<button class="primary" onclick="showCustomer()">Buy Data</button><br><br>
+<button class="success" onclick="showLogin()">Agent / Admin Login</button>
+</div>
+
+<!-- CUSTOMER -->
+<div class="card hidden" id="customer">
+<h3>Buy Data</h3>
+<select id="cNet">
+<option value="">Select Network</option>
+<option>MTN</option><option>Telecel</option><option>AirtelTigo</option>
+</select>
+<input id="cPhone" placeholder="Beneficiary Number">
+<input id="cData" placeholder="Data (GB)">
+<button class="primary" onclick="customerPay()">Pay & Order</button>
+<button class="danger" onclick="back()">Back</button>
+</div>
+
 <!-- LOGIN -->
-<div class="card" id="loginBox">
-  <h3>Login</h3>
-  <input type="text" placeholder="Username or Email">
-  <input type="password" placeholder="Password">
-  <button onclick="login()">Sign In</button>
-  <p style="text-align:center;">New Agent? <a href="#" onclick="showRegister()">Register</a></p>
+<div class="card hidden" id="login">
+<h3>Login</h3>
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+<button class="primary" onclick="login()">Login</button>
+<button class="danger" onclick="back()">Back</button>
 </div>
 
-<!-- AGENT DASHBOARD -->
-<div class="card hidden" id="agentBox">
-  <h3>Agent Dashboard</h3>
-  <p><b>Balance:</b> GHS 0.00</p>
+<!-- DASHBOARD -->
+<div class="card hidden" id="dashboard">
+<h3 id="roleTitle"></h3>
 
-  <h4>Place Order</h4>
+<button class="success hidden" id="exportBtn" onclick="exportExcel()">📤 Export Excel</button>
 
-  <select id="network" onchange="updatePackages()">
-    <option value="MTN">MTN</option>
-    <option value="AirtelTigo">AIRTEL TIGO</option>
-    <option value="Telecel">TELECEL</option>
-  </select>
+<h4>Orders</h4>
+<table>
+<thead>
+<tr>
+<th>Network</th><th>Phone</th><th>Data</th><th>Status</th><th>Action</th>
+</tr>
+</thead>
+<tbody id="orders"></tbody>
+</table>
 
-  <input id="phone" type="text" placeholder="Beneficiary Phone Number">
+<!-- ADMIN SETTINGS -->
+<div class="card hidden" id="adminSettings">
+  <h3>Admin Settings</h3>
 
-  <select id="package"></select>
+  <h4>Set Data Prices (GHS per GB)</h4>
+  <input id="priceMTN" placeholder="MTN Price">
+  <input id="priceTelecel" placeholder="Telecel Price">
+  <input id="priceAirtelTigo" placeholder="AirtelTigo Price">
+  <button class="success" onclick="savePrices()">Save Prices</button>
 
-  <button onclick="payWithPaystack()">Pay & Submit Order</button>
-
-  <h4>📜 Order History</h4>
-  <div id="orderList"></div>
-
-  <br>
-  <button style="background:#dc3545" onclick="logout()">Logout</button>
+  <h4>AFA Registration Fee (GHS)</h4>
+  <input id="afaFee" placeholder="AFA Fee" value="20" disabled>
+  <small>AFA fee is fixed at 20 GHS for all customers and agents</small>
 </div>
 
-<!-- REGISTER -->
-<div class="card hidden" id="registerBox">
-  <h3>Agent Registration</h3>
-  <input type="text" placeholder="Full Name">
-  <input type="text" placeholder="Phone Number">
-  <input type="email" placeholder="Email">
-  <input type="password" placeholder="Password">
-  <button onclick="register()">Register</button>
-</div>
-
-<!-- PAYMENT INFO -->
-<div class="card">
-  <h3>💰 Payment (Paystack)</h3>
-  <p>After selecting package, click "Pay & Submit Order" to make payment.</p>
-</div>
-
-<!-- ADMIN -->
-<div class="card admin">
-  <h3>🔐 Admin Panel (Basic)</h3>
-  <p>Total Orders Today: <span id="totalOrders">0</span></p>
-  <p>Total Agents: <span id="totalAgents">0</span></p>
-  <p style="font-size:13px">
-    *This is a starter admin view. Full automation requires backend setup later.
-  </p>
+<button class="danger" onclick="logout()">Logout</button>
 </div>
 
 </div>
-
-<a class="whatsapp" href="https://wa.me/233591467262" target="_blank">💬</a>
 
 <script>
-// DATA BUNDLES
-const dataBundles = {
-  MTN: [
-    {name:"1GB", price:5.5},{name:"2GB", price:11},{name:"3GB", price:16},{name:"4GB", price:22},
-    {name:"5GB", price:26},{name:"10GB", price:49},{name:"15GB", price:70},{name:"20GB", price:90}
-  ],
-  Telecel: [
-    {name:"5GB", price:26},{name:"10GB", price:45},{name:"15GB", price:70},{name:"20GB", price:75},
-    {name:"25GB", price:110},{name:"30GB", price:130},{name:"40GB", price:170},{name:"50GB", price:210}
-  ],
-  AirtelTigo: [
-    {name:"1GB", price:5},{name:"2GB", price:10},{name:"3GB", price:15},{name:"4GB", price:20},
-    {name:"5GB", price:25},{name:"10GB", price:45},{name:"15GB", price:65},{name:"20GB", price:80}
-  ]
-};
+// DOM Elements
+const landing = document.getElementById("landing");
+const customer = document.getElementById("customer");
+const login = document.getElementById("login");
+const dashboard = document.getElementById("dashboard");
+const ordersEl = document.getElementById("orders");
+const roleTitle = document.getElementById("roleTitle");
+const exportBtn = document.getElementById("exportBtn");
+const adminSettings = document.getElementById("adminSettings");
+const cNet = document.getElementById("cNet");
+const cPhone = document.getElementById("cPhone");
+const cData = document.getElementById("cData");
+const email = document.getElementById("email");
+const pass = document.getElementById("pass");
+const priceMTN = document.getElementById("priceMTN");
+const priceTelecel = document.getElementById("priceTelecel");
+const priceAirtelTigo = document.getElementById("priceAirtelTigo");
+const afaFeeInput = document.getElementById("afaFee");
 
-// LOGIN/LOGOUT
-function login(){document.getElementById("loginBox").classList.add("hidden");document.getElementById("agentBox").classList.remove("hidden");updatePackages();loadOrders();}
-function logout(){document.getElementById("agentBox").classList.add("hidden");document.getElementById("loginBox").classList.remove("hidden");}
+// Admin credentials
+const ADMIN_EMAIL="admin@aspierrowdata.com";
+const ADMIN_PASS="admin123";
+let currentUser=null;
 
-// REGISTER
-function showRegister(){document.getElementById("loginBox").classList.add("hidden");document.getElementById("registerBox").classList.remove("hidden");}
-function register(){alert("Registration successful. Login now.");document.getElementById("registerBox").classList.add("hidden");document.getElementById("loginBox").classList.remove("hidden");}
+// Default Prices
+let prices = JSON.parse(localStorage.getItem("dataPrices")) || {MTN:5, Telecel:5, AirtelTigo:5};
+let afaFee = 20; // Fixed AFA fee
 
-// UPDATE PACKAGE DROPDOWN
-function updatePackages(){
-  const network = document.getElementById("network").value;
-  const packageSelect = document.getElementById("package");
-  packageSelect.innerHTML = "";
-  dataBundles[network].forEach(b => {
-    packageSelect.innerHTML += `<option value="${b.name}" data-price="${b.price}">${b.name} - GH₵ ${b.price}</option>`;
-  });
+// Initialize admin price inputs
+priceMTN.value = prices.MTN;
+priceTelecel.value = prices.Telecel;
+priceAirtelTigo.value = prices.AirtelTigo;
+
+// Show / Hide Sections
+function showCustomer(){hideAll();customer.classList.remove("hidden")}
+function showLogin(){hideAll();login.classList.remove("hidden")}
+function back(){hideAll();landing.classList.remove("hidden")}
+function hideAll(){
+  landing.classList.add("hidden");
+  customer.classList.add("hidden");
+  login.classList.add("hidden");
+  dashboard.classList.add("hidden");
+  adminSettings.classList.add("hidden");
 }
 
-// PAYSTACK PAYMENT & ORDER
-function payWithPaystack(){
-  const network = document.getElementById("network").value;
-  const phone = document.getElementById("phone").value;
-  const packageSelect = document.getElementById("package");
-  const packageOption = packageSelect.value;
-  const price = packageSelect.selectedOptions[0].dataset.price;
+// Customer Payment
+function customerPay(){
+  let net=cNet.value, phone=cPhone.value, data=cData.value;
+  if(!net||!phone||!data) return alert("Fill all fields");
+  
+  let pricePerGB = prices[net] || 5;
+  let amount = data*pricePerGB + afaFee; // Add 20 GHS AFA
 
-  if(!phone){alert("Please enter phone number"); return;}
-
-  let handler = PaystackPop.setup({
-    key: 'pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e', // Replace with your Paystack public key
-    email: 'customer@example.com', // Can be dynamically entered
-    amount: price * 100, // Paystack expects amount in kobo
-    currency: "GHS",
-    ref: 'TX'+Math.floor(Math.random() * 1000000000),
-    onClose: function(){ alert('Payment cancelled.'); },
-    callback: function(response){
-      alert('Payment successful. Ref: ' + response.reference);
-      saveOrder(network, phone, packageOption);
+  PaystackPop.setup({
+    key:"pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e",
+    email:"guest@site.com",
+    amount:amount*100,
+    currency:"GHS",
+    callback:()=>{
+      saveOrder("Guest",net,phone,data,"paystack");
+      alert(`Order placed. AFA Registration of 20 GHS applied.`);
+      back();
     }
-  });
-  handler.openIframe();
+  }).openIframe();
 }
 
-// SAVE ORDER IN LOCALSTORAGE
-function saveOrder(network, phone, packageOption){
-  let order = {network, phone, package: packageOption, date: new Date().toLocaleString()};
-  let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  orders.push(order);
-  localStorage.setItem("orders", JSON.stringify(orders));
+// Login
+function login(){
+  let e=email.value,p=pass.value;
+  if(e===ADMIN_EMAIL && p===ADMIN_PASS){
+    currentUser={role:"admin"};
+  } else {
+    currentUser={role:"agent"};
+  }
+  loadDashboard();
+}
+
+// Load Dashboard
+function loadDashboard(){
+  hideAll();
+  dashboard.classList.remove("hidden");
+  roleTitle.innerText=currentUser.role.toUpperCase()+" DASHBOARD";
+  if(currentUser.role==="admin"){
+    exportBtn.classList.remove("hidden");
+    adminSettings.classList.remove("hidden");
+  }
   loadOrders();
-  // Send WhatsApp notification
-  const msg = `Hello Aspierrow Data GH,%0AOrder Details:%0ANetwork: ${network}%0APackage: ${packageOption}%0APhone: ${phone}`;
-  window.open(`https://wa.me/233591467262?text=${msg}`,"_blank");
-  document.getElementById("phone").value = "";
 }
 
-// LOAD ORDER HISTORY
-function loadOrders(){
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
-  const list = document.getElementById("orderList");
-  list.innerHTML = "";
-  orders.reverse().forEach(o=>{
-    list.innerHTML += `<div style="border-bottom:1px solid #ddd;padding:8px 0"><b>${o.network}</b> - ${o.package}<br>${o.phone}<br><small>${o.date}</small></div>`;
+// Orders Management
+function saveOrder(user,net,phone,data,payment){
+  let orders=JSON.parse(localStorage.getItem("orders"))||[];
+  orders.push({
+    user,network:net,phone,data,
+    status:"PENDING",
+    payment,
+    date:new Date().toLocaleString()
   });
-  document.getElementById("totalOrders").innerText = orders.length;
+  localStorage.setItem("orders",JSON.stringify(orders));
+  window.open(`https://wa.me/233591467262?text=NEW ORDER%0ANetwork:${net}%0APhone:${phone}%0AData:${data}GB%0AAFA:20GHS`);
 }
+
+function loadOrders(){
+  let orders=JSON.parse(localStorage.getItem("orders"))||[];
+  let ordersHtml="";
+  orders.forEach((o,i)=>{
+    ordersHtml+=`
+<tr>
+<td>${o.network}</td>
+<td>${o.phone}</td>
+<td>${o.data}GB</td>
+<td><span class="status ${o.status}">${o.status}</span></td>
+<td>${currentUser.role==="admin"?`<button class="warning" onclick="toggleStatus(${i})">Toggle</button>`:"-"}</td>
+</tr>`;
+  });
+  ordersEl.innerHTML=ordersHtml;
+}
+
+function toggleStatus(i){
+  let orders=JSON.parse(localStorage.getItem("orders"));
+  orders[i].status = orders[i].status==="DELIVERED"?"PENDING":"DELIVERED";
+  localStorage.setItem("orders",JSON.stringify(orders));
+  loadOrders();
+}
+
+// Export Excel
+function exportExcel(){
+  let orders=JSON.parse(localStorage.getItem("orders"))||[];
+  let data=orders.map((o,i)=>({
+    OrderID:i+1,
+    Network:o.network,
+    Phone:o.phone,
+    Data:o.data,
+    Status:o.status,
+    Payment:o.payment,
+    Date:o.date
+  }));
+  let ws=XLSX.utils.json_to_sheet(data);
+  let wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"Orders");
+  XLSX.writeFile(wb,"Aspierrow_Orders.xlsx");
+}
+
+// Admin Price Control
+function savePrices(){
+  prices.MTN = Number(priceMTN.value);
+  prices.Telecel = Number(priceTelecel.value);
+  prices.AirtelTigo = Number(priceAirtelTigo.value);
+  localStorage.setItem("dataPrices", JSON.stringify(prices));
+  alert("Prices saved!");
+}
+
+// Logout
+function logout(){location.reload();}
 </script>
 
 </body>
