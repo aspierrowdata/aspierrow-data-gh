@@ -39,8 +39,8 @@ th,td{padding:8px;border-bottom:1px solid #ddd;font-size:14px}
 
 <!-- LANDING -->
 <div class="card" id="landing">
-<button class="primary" onclick="showCustomer()">Buy Data</button><br><br>
-<button class="success" onclick="showLogin()">Agent / Admin Login</button>
+<button class="primary">Buy Data</button><br><br>
+<button class="success">Agent / Admin Login</button>
 </div>
 
 <!-- CUSTOMER -->
@@ -52,8 +52,8 @@ th,td{padding:8px;border-bottom:1px solid #ddd;font-size:14px}
 </select>
 <input id="cPhone" placeholder="Beneficiary Number">
 <input id="cData" placeholder="Data (GB)">
-<button class="primary" onclick="customerPay()">Pay & Order</button>
-<button class="danger" onclick="back()">Back</button>
+<button class="primary">Pay & Order</button>
+<button class="danger">Back</button>
 </div>
 
 <!-- LOGIN -->
@@ -61,15 +61,15 @@ th,td{padding:8px;border-bottom:1px solid #ddd;font-size:14px}
 <h3>Login</h3>
 <input id="email" placeholder="Email">
 <input id="pass" type="password" placeholder="Password">
-<button class="primary" onclick="login()">Login</button>
-<button class="danger" onclick="back()">Back</button>
+<button class="primary">Login</button>
+<button class="danger">Back</button>
 </div>
 
 <!-- DASHBOARD -->
 <div class="card hidden" id="dashboard">
 <h3 id="roleTitle"></h3>
 
-<button class="success hidden" id="exportBtn" onclick="exportExcel()">📤 Export Excel</button>
+<button class="success hidden" id="exportBtn">📤 Export Excel</button>
 
 <h4>Orders</h4>
 <table>
@@ -89,14 +89,14 @@ th,td{padding:8px;border-bottom:1px solid #ddd;font-size:14px}
   <input id="priceMTN" placeholder="MTN Price">
   <input id="priceTelecel" placeholder="Telecel Price">
   <input id="priceAirtelTigo" placeholder="AirtelTigo Price">
-  <button class="success" onclick="savePrices()">Save Prices</button>
+  <button class="success">Save Prices</button>
 
   <h4>AFA Registration Fee (GHS)</h4>
   <input id="afaFee" placeholder="AFA Fee" value="20" disabled>
   <small>AFA fee is fixed at 20 GHS for all customers and agents</small>
 </div>
 
-<button class="danger" onclick="logout()">Logout</button>
+<button class="danger">Logout</button>
 </div>
 
 </div>
@@ -120,9 +120,17 @@ const priceMTN = document.getElementById("priceMTN");
 const priceTelecel = document.getElementById("priceTelecel");
 const priceAirtelTigo = document.getElementById("priceAirtelTigo");
 const afaFeeInput = document.getElementById("afaFee");
+const landingBuyBtn = landing.querySelector(".primary");
+const landingLoginBtn = landing.querySelector(".success");
+const customerPayBtn = customer.querySelector(".primary");
+const customerBackBtn = customer.querySelector(".danger");
+const loginBtn = login.querySelector(".primary");
+const loginBackBtn = login.querySelector(".danger");
+const savePriceBtn = adminSettings.querySelector(".success");
+const logoutBtn = dashboard.querySelector(".danger");
 
 // Admin credentials
-const ADMIN_EMAIL="admin@aspierrowdata.com";
+const ADMIN_EMAIL="admin@dataconnectgh.com";
 const ADMIN_PASS="admin123";
 let currentUser=null;
 
@@ -135,7 +143,7 @@ priceMTN.value = prices.MTN;
 priceTelecel.value = prices.Telecel;
 priceAirtelTigo.value = prices.AirtelTigo;
 
-// Show / Hide Sections
+// Functions
 function showCustomer(){hideAll();customer.classList.remove("hidden")}
 function showLogin(){hideAll();login.classList.remove("hidden")}
 function back(){hideAll();landing.classList.remove("hidden")}
@@ -147,7 +155,6 @@ function hideAll(){
   adminSettings.classList.add("hidden");
 }
 
-// Customer Payment
 function customerPay(){
   let net=cNet.value, phone=cPhone.value, data=cData.value;
   if(!net||!phone||!data) return alert("Fill all fields");
@@ -156,7 +163,7 @@ function customerPay(){
   let amount = data*pricePerGB + afaFee; // Add 20 GHS AFA
 
   PaystackPop.setup({
-    key:"pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e",
+    key:"YOUR_PAYSTACK_PUBLIC_KEY",
     email:"guest@site.com",
     amount:amount*100,
     currency:"GHS",
@@ -168,7 +175,6 @@ function customerPay(){
   }).openIframe();
 }
 
-// Login
 function login(){
   let e=email.value,p=pass.value;
   if(e===ADMIN_EMAIL && p===ADMIN_PASS){
@@ -179,7 +185,6 @@ function login(){
   loadDashboard();
 }
 
-// Load Dashboard
 function loadDashboard(){
   hideAll();
   dashboard.classList.remove("hidden");
@@ -191,7 +196,6 @@ function loadDashboard(){
   loadOrders();
 }
 
-// Orders Management
 function saveOrder(user,net,phone,data,payment){
   let orders=JSON.parse(localStorage.getItem("orders"))||[];
   orders.push({
@@ -227,7 +231,6 @@ function toggleStatus(i){
   loadOrders();
 }
 
-// Export Excel
 function exportExcel(){
   let orders=JSON.parse(localStorage.getItem("orders"))||[];
   let data=orders.map((o,i)=>({
@@ -245,7 +248,6 @@ function exportExcel(){
   XLSX.writeFile(wb,"Aspierrow_Orders.xlsx");
 }
 
-// Admin Price Control
 function savePrices(){
   prices.MTN = Number(priceMTN.value);
   prices.Telecel = Number(priceTelecel.value);
@@ -254,8 +256,20 @@ function savePrices(){
   alert("Prices saved!");
 }
 
-// Logout
 function logout(){location.reload();}
+
+// Event Listeners
+landingBuyBtn.addEventListener("click", showCustomer);
+landingLoginBtn.addEventListener("click", showLogin);
+customerPayBtn.addEventListener("click", customerPay);
+customerBackBtn.addEventListener("click", back);
+loginBtn.addEventListener("click", login);
+loginBackBtn.addEventListener("click", back);
+savePriceBtn.addEventListener("click", savePrices);
+logoutBtn.addEventListener("click", logout);
+window.toggleStatus = toggleStatus;
+window.exportExcel = exportExcel;
+
 </script>
 
 </body>
