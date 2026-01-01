@@ -1,284 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aspierrow Data GH</title>
-<style>
-body {margin:0;font-family:Arial,sans-serif;background:#f4f6f8;}
-header {background:#0d6efd;color:#fff;padding:20px;text-align:center;}
-.container {padding:15px; max-width:600px;margin:auto;}
-.card {background:#fff;border-radius:10px;padding:15px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,.1);}
-button {width:100%;padding:12px;background:#0d6efd;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:5px;}
-input, select {width:100%;padding:10px;margin:8px 0 12px;border-radius:6px;border:1px solid #ccc;}
-.hidden {display:none;}
-.whatsapp {position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;padding:14px;border-radius:50%;font-size:22px;text-decoration:none;}
-.admin {background:#007bff;color:#fff;padding:10px;margin-top:10px;border-radius:8px;}
-.grid {display:grid;grid-template-columns:1fr;gap:10px;}
-.grid button {width:100%;text-align:left;background:#e6f0ff;color:#000;border:1px solid #007bff;}
-.grid button.selected {background:#007bff;color:#fff;}
-.gold {color:#FFD700;}
-</style>
+<meta charset="UTF-8" />
+<title>Aspierrowdata</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://js.paystack.co/v1/inline.js"></script>
+<style>
+:root{--blue:#007bff;--gold:#f4c430;--bg:#f4f6f9}
+*{box-sizing:border-box;font-family:'Montserrat',Arial,sans-serif}
+body{margin:0;background:var(--bg)}
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+.container{max-width:1100px;margin:auto;padding:20px}
+.card{background:#fff;border-radius:10px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+button{background:var(--blue);color:#fff;border:none;padding:12px 16px;border-radius:6px;font-weight:bold;cursor:pointer;margin-top:10px}
+button.gold{background:var(--gold);color:#000}
+input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:10px}
+.network{border:2px solid var(--blue);padding:15px;border-radius:10px;text-align:center;font-weight:bold;cursor:pointer}
+.network.active{background:var(--blue);color:#fff}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:10px;border-bottom:1px solid #ddd;text-align:center}
+th{background:#eef2ff}
+.status-pending{color:orange;font-weight:bold}
+.status-delivered{color:green;font-weight:bold}
+footer{text-align:center;padding:15px;color:#666}
+.whatsapp{position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;font-size:22px;padding:14px;border-radius:50%;text-decoration:none}
+.back-btn{margin:10px 0;display:inline-block;cursor:pointer;background:#ccc;color:#000;padding:5px 10px;border-radius:5px}
+</style>
 </head>
 <body>
 
-<header>
-  <h2>Aspierrow Data GH</h2>
-  <small>Affordable • Fast • Reliable</small>
-</header>
-
-<div class="container">
-
 <!-- LANDING -->
-<div class="card" id="landingBox">
-  <h3>Welcome!</h3>
-  <button onclick="showCustomer()">Want to buy now? (Skip signup)</button>
-  <button onclick="showLogin()">Agent Login / Sign Up</button>
-  <p class="gold" style="text-align:center;margin-top:10px;">© 2025 Aspierrow Data GH</p>
-</div>
-
-<!-- CUSTOMER FLOW -->
-<div class="card hidden" id="customerBox">
-  <h3>Buy Data (No Account Needed)</h3>
-  <div class="grid" id="customerNetworks"></div>
-  <div class="grid" id="customerPackages"></div>
-  <input id="cPhone" placeholder="Beneficiary Number (0XXXXXXXXX)" pattern="0[0-9]{9}" required>
-  <button onclick="customerPay()">Pay & Place Order</button>
-  <button onclick="showLanding()" style="background:#dc3545;margin-top:10px">Back</button>
-</div>
-
-<!-- AFA REGISTRATION -->
-<div class="card hidden" id="afaBox">
-  <h3>AFA Registration</h3>
-  <input id="afaName" placeholder="Full Name" required>
-  <input id="afaPhone" placeholder="Phone Number (0XXXXXXXXX)" pattern="0[0-9]{9}" required>
-  <input id="afaGhanaCard" placeholder="Ghana Card Number" required>
-  <button onclick="afaRegister()">Pay & Register (GHS 20)</button>
-  <button onclick="showLanding()" style="background:#dc3545;margin-top:10px">Back</button>
+<div id="page-landing" class="page active">
+ <div class="container">
+  <div class="card" style="max-width:500px;margin:auto;text-align:center">
+   <h1 style="color:var(--blue)">ASPIERROW DATA GH</h1>
+   <p><b>Affordable • Fast Delivery• Reliable</b></p>
+   <button onclick="go('buy')">Buy Data Now</button><br>
+   <button class="gold" onclick="go('afa')">AFA Registration</button><br>
+   <button onclick="go('login')">Login / Create Account</button>
+  </div>
+ </div>
 </div>
 
 <!-- LOGIN -->
-<div class="card hidden" id="loginBox">
-  <h3>Agent Login / Sign Up</h3>
-  <input id="loginEmail" type="email" placeholder="Email">
-  <input id="loginPass" type="password" placeholder="Password">
-  <button onclick="login()">Sign In</button>
-  <p style="text-align:center">New Agent? <a href="#" onclick="showRegister()">Create Account</a></p>
+<div id="page-login" class="page">
+ <span class="back-btn" onclick="go('landing')">← Back</span>
+ <div class="container">
+  <div class="card" style="max-width:400px;margin:auto">
+   <h2>Agent Login</h2>
+   <input id="loginEmail" placeholder="Email" />
+   <input id="loginPass" type="password" placeholder="Password" />
+   <button onclick="login()">Login</button>
+   <p style="text-align:center">New agent? <a href="#" onclick="go('register')">Create account</a></p>
+  </div>
+ </div>
 </div>
 
 <!-- REGISTER -->
-<div class="card hidden" id="registerBox">
-  <h3>Agent Registration</h3>
-  <input id="regName" placeholder="Full Name" required>
-  <input id="regPhone" placeholder="Phone Number (0XXXXXXXXX)" pattern="0[0-9]{9}" required>
-  <input id="regGhanaCard" placeholder="Ghana Card Number" required>
-  <input id="regEmail" type="email" placeholder="Email" required>
-  <input id="regPass" type="password" placeholder="Password (min 6 chars)" required>
-  <input id="regConfirm" type="password" placeholder="Confirm Password" required>
-  <button onclick="register()">Create Account</button>
-  <p style="text-align:center">Already have an account? <a href="#" onclick="showLogin()">Sign In</a></p>
+<div id="page-register" class="page">
+ <span class="back-btn" onclick="go('login')">← Back</span>
+ <div class="container">
+  <div class="card" style="max-width:400px;margin:auto">
+   <h2>Create Agent Account</h2>
+   <input id="regName" placeholder="Full Name" />
+   <input id="regPhone" placeholder="Phone Number" />
+   <input id="regEmail" placeholder="Email" />
+   <input id="regPass" type="password" placeholder="Password" />
+   <input id="regPass" type="password" placeholder="Confirm Password" />
+   <button onclick="register()">Create Account</button>
+  </div>
+ </div>
 </div>
 
-<!-- AGENT DASHBOARD -->
-<div class="card hidden" id="agentBox">
-  <h3>Agent Dashboard</h3>
-  <p><b>Wallet Balance:</b> GHS <span id="balance">0.00</span></p>
-  <button onclick="fundWallet()" style="background:#FFD700;color:#000;">Fund Wallet</button>
-
-  <hr>
-  <h4>Select Network</h4>
-  <div class="grid" id="agentNetworks"></div>
-  <div class="grid" id="agentPackages"></div>
-  <input id="agentPhone" placeholder="Beneficiary Number (0XXXXXXXXX)" pattern="0[0-9]{9}" required>
-  <select id="paymentOption">
-    <option value="wallet">Pay with Wallet</option>
-    <option value="paystack">Pay with Paystack</option>
-  </select>
-  <button onclick="placeOrder()">Submit Order</button>
-
-  <h4>📜 Order History</h4>
-  <div id="orderList"></div>
-
-  <div class="admin hidden" id="adminBox">
-    <h4>Admin Panel</h4>
-    Total Orders: <span id="totalOrders">0</span>
-    Total Agents: <span id="totalAgents">0</span>
+<!-- BUY DATA -->
+<div id="page-buy" class="page">
+ <span class="back-btn" onclick="go('landing')">← Back</span>
+ <div class="container">
+  <div class="card">
+   <h2>Buy Data</h2>
+   <input id="cPhone" placeholder="Beneficiary Number (0XXXXXXXXX)" />
+   <div class="grid" id="networks"></div>
+   <select id="cPackage"><option value="">Select Package</option></select>
+   <button onclick="payCustomer()">Pay with Paystack</button>
   </div>
+ </div>
+</div>
 
-  <button onclick="logout()" style="background:#dc3545;margin-top:10px">Logout</button>
+<!-- AFA -->
+<div id="page-afa" class="page">
+ <span class="back-btn" onclick="go('landing')">← Back</span>
+ <div class="container">
+  <div class="card" style="max-width:500px;margin:auto">
+   <h2>AFA Registration</h2>
+   <input id="afaName" placeholder="Full Name" />
+   <input id="afaPhone" placeholder="Phone Number" />
+   <input id="afaGhana" placeholder="Ghana Card Number" />
+   <button onclick="payAFA()">Pay GHS 20</button>
+  </div>
+ </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="page-dashboard" class="page">
+ <span class="back-btn" onclick="go('landing')">← Back</span>
+ <div class="container">
+  <div class="card">
+   <button onclick="showAgentOrders()">My Orders</button>
+   <button onclick="logout()">Logout</button>
+   <button id="viewAgentsBtn" class="gold" onclick="showAgents()" style="display:none">View Agents</button>
+  </div>
+  <div id="agentOrders" class="card"></div>
+  <div id="adminPanel" class="card" style="display:none">
+   <h3>Admin Dashboard</h3>
+   <button class="gold" onclick="exportExcel()">Export Orders</button>
+   <div id="adminOrders"></div>
+  </div>
+  <div id="agentsList" class="card" style="display:none">
+   <h3>Agents</h3>
+   <div id="agentsTable"></div>
+  </div>
+ </div>
 </div>
 
 <a class="whatsapp" href="https://wa.me/233591467262" target="_blank">💬</a>
+<footer>© 2026 Aspierrowdatagh</footer>
 
 <script>
-// ---------------- DATA ----------------
-const bundles = {
-  MTN: [1,2,3,4,5,6,7,8,9,10,15,20,25,30,40,50,100],
-  Telecel: [5,10,15,20,25,30,35,40,45,50,100],
-  AirtelTigo: [1,2,3,4,5,6,7,8,9,10,15,20]
+const PAYSTACK_KEY="pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e";
+const ADMIN_EMAIL="admin@aspierrowdatagh.com";
+const ADMIN_PASS="admin123";
+
+let pages=document.querySelectorAll('.page');
+let users=JSON.parse(localStorage.getItem('users')||'[]');
+let orders=JSON.parse(localStorage.getItem('orders')||'[]');
+let currentUser=null,selectedNetwork="";
+
+const prices={
+ MTN:{1:6,2:12,3:17,4:23,5:27,10:52,15:75,20:95,25:115,30:135,40:175,50:215,100:420},
+ TELECEL:{5:28,10:48,15:73,20:78,25:113,30:133,35:150,40:175,45:195,50:215,100:410},
+ AIRTELTIGO:{1:6,2:11,3:16,4:21,5:26,10:47,15:68,20:83}
 };
-const basePrices = {MTN:5.5,Telecel:26,AirtelTigo:5}; // approximate base for 1GB
 
-// ---------------- STATE ----------------
-let currentUser = null;
-let selectedCustomerNetwork = null;
-let selectedCustomerPackage = null;
-let selectedAgentNetwork = null;
-let selectedAgentPackage = null;
-
-// ---------------- HELPERS ----------------
-function showLanding(){landingBox.classList.remove("hidden"); customerBox.classList.add("hidden"); afaBox.classList.add("hidden"); loginBox.classList.add("hidden"); registerBox.classList.add("hidden"); agentBox.classList.add("hidden");}
-function showCustomer(){landingBox.classList.add("hidden"); customerBox.classList.remove("hidden"); renderCustomerNetworks();}
-function showAFA(){landingBox.classList.add("hidden"); afaBox.classList.remove("hidden");}
-function showLogin(){landingBox.classList.add("hidden"); loginBox.classList.remove("hidden");}
-function showRegister(){loginBox.classList.add("hidden"); registerBox.classList.remove("hidden");}
-
-// ---------------- CUSTOMER ----------------
-function renderCustomerNetworks(){
-  const container = document.getElementById("customerNetworks");
-  container.innerHTML="";
-  for(let net in bundles){
-    const btn=document.createElement("button");
-    btn.innerText=net;
-    btn.onclick=()=>{selectedCustomerNetwork=net; renderCustomerPackages(); highlightButton(container,btn);}
-    container.appendChild(btn);
-  }
-}
-function renderCustomerPackages(){
-  const container=document.getElementById("customerPackages");
-  container.innerHTML="";
-  bundles[selectedCustomerNetwork].forEach(p=>{
-    const price=Math.round(basePrices[selectedCustomerNetwork]*p); // approximate scaling
-    const btn=document.createElement("button");
-    btn.innerText=p+"GB - GHS "+price;
-    btn.onclick=()=>{selectedCustomerPackage=p; highlightButton(container,btn);}
-    container.appendChild(btn);
-  });
-}
-function highlightButton(container,btn){
-  Array.from(container.children).forEach(b=>b.classList.remove("selected"));
-  btn.classList.add("selected");
-}
-function customerPay(){
-  const phone=document.getElementById("cPhone").value;
-  if(!phone || !selectedCustomerNetwork || !selectedCustomerPackage){return alert("Please fill all required fields");}
-  const price=Math.round(basePrices[selectedCustomerNetwork]*selectedCustomerPackage);
-  PaystackPop.setup({
-    key:"pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e",
-    email:"customer@example.com",
-    amount:price*100,
-    currency:"GHS",
-    callback:()=>{alert("Payment successful!"); saveOrder("Guest",selectedCustomerNetwork,selectedCustomerPackage,phone); selectedCustomerNetwork=null; selectedCustomerPackage=null; customerPackages.innerHTML=""; cPhone.value="";},
-  }).openIframe();
+function go(p){
+ pages.forEach(x=>x.classList.remove('active'));
+ document.getElementById('page-'+p).classList.add('active');
+ if(p==='buy') renderNetworks();
 }
 
-// ---------------- AFA ----------------
-function afaRegister(){
-  const name=afaName.value,phone=afaPhone.value,ghana=afaGhanaCard.value;
-  if(!name||!phone||!ghana){return alert("Please fill all required fields");}
-  const price=20;
-  PaystackPop.setup({
-    key:"pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e",
-    email:"customer@example.com",
-    amount:price*100,
-    currency:"GHS",
-    callback:()=>{alert("AFA registration successful!"); afaName.value=""; afaPhone.value=""; afaGhanaCard.value="";},
-  }).openIframe();
-}
-
-// ---------------- AGENT ----------------
-function renderAgentNetworks(){
-  const container = document.getElementById("agentNetworks");
-  container.innerHTML="";
-  for(let net in bundles){
-    const btn=document.createElement("button");
-    btn.innerText=net;
-    btn.onclick=()=>{selectedAgentNetwork=net; renderAgentPackages(); highlightButton(container,btn);}
-    container.appendChild(btn);
-  }
-}
-function renderAgentPackages(){
-  const container=document.getElementById("agentPackages");
-  container.innerHTML="";
-  bundles[selectedAgentNetwork].forEach(p=>{
-    const price=Math.round(basePrices[selectedAgentNetwork]*p);
-    const btn=document.createElement("button");
-    btn.innerText=p+"GB - GHS "+price;
-    btn.onclick=()=>{selectedAgentPackage=p; highlightButton(container,btn);}
-    container.appendChild(btn);
-  });
-}
+// Agent Register
 function register(){
-  const name=regName.value,email=regEmail.value,phone=regPhone.value,ghana=regGhanaCard.value,pass=regPass.value,confirm=regConfirm.value;
-  if(!name||!email||!phone||!ghana||!pass||!confirm){return alert("Fill all required fields");}
-  if(pass!==confirm) return alert("Passwords do not match");
-  const users=JSON.parse(localStorage.getItem("users"))||[];
-  if(users.find(u=>u.email===email)) return alert("Email already registered");
-  users.push({name,email,phone,ghana,password:btoa(pass),balance:0});
-  localStorage.setItem("users",JSON.stringify(users));
-  alert("Account created! Login now."); showLogin();
-}
-function login(){
-  const email=loginEmail.value,pass=loginPass.value;
-  const users=JSON.parse(localStorage.getItem("users"))||[];
-  const user=users.find(u=>u.email===email&&u.password===btoa(pass));
-  if(!user) return alert("Invalid login");
-  currentUser=user;
-  loginBox.classList.add("hidden");
-  agentBox.classList.remove("hidden");
-  renderAgentNetworks();
-  renderAgentPackages();
-  updateBalance();
-  loadOrders();
-}
-function logout(){currentUser=null; location.reload();}
-function updateBalance(){balance.innerText=currentUser.balance.toFixed(2);}
-function fundWallet(){
-  let amount=prompt("Enter amount (GHS)"); if(!amount || amount<=0) return;
-  PaystackPop.setup({
-    key:"pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e",
-    email:currentUser.email,
-    amount:amount*100,
-    currency:"GHS",
-    callback:()=>{currentUser.balance+=parseFloat(amount); saveUsers(); updateBalance(); alert("Wallet funded");}
-  }).openIframe();
-}
-function placeOrder(){
-  const phone=agentPhone.value;
-  if(!phone || !selectedAgentNetwork || !selectedAgentPackage){return alert("Fill all required fields");}
-  const price=Math.round(basePrices[selectedAgentNetwork]*selectedAgentPackage);
-  if(paymentOption.value==="wallet"){
-    if(currentUser.balance<price) return alert("Insufficient balance");
-    currentUser.balance-=price; saveUsers(); updateBalance(); alert("Order placed with wallet payment"); saveOrder(currentUser.name,selectedAgentNetwork,selectedAgentPackage,phone);
-  } else {
-    PaystackPop.setup({
-      key:"pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e",
-      email:currentUser.email,
-      amount:price*100,
-      currency:"GHS",
-      callback:()=>{alert("Payment successful"); saveOrder(currentUser.name,selectedAgentNetwork,selectedAgentPackage,phone);}
-    }).openIframe();
-  }
-  selectedAgentNetwork=null; selectedAgentPackage=null; agentPackages.innerHTML=""; agentPhone.value="";
+ if(!regName.value || !regPhone.value || !regEmail.value || !regPass.value) return alert('Fill all fields');
+ users.push({name:regName.value,phone:regPhone.value,email:regEmail.value,pass:regPass.value});
+ localStorage.setItem('users',JSON.stringify(users));
+ alert('Account created');
+ go('login');
 }
 
-// ---------------- STORAGE ----------------
-function saveOrder(user,network,pack,phone){
-  const orders=JSON.parse(localStorage.getItem("orders"))||[];
-  orders.push({user,network,package:pack,phone,date:new Date().toLocaleString()});
-  localStorage.setItem("orders",JSON.stringify(orders));
-  loadOrders();
-  let msg=`NEW DATA ORDER\nUser:${user}\nNetwork:${network}\nPackage:${pack}\nPhone:${phone}`;
-  window.open("https://wa.me/233591467262?text="+encodeURIComponent(msg),"_blank");
+// Agent Login
+function login(){
+ const e=loginEmail.value,p=loginPass.value;
+ if(e===ADMIN_EMAIL && p===ADMIN_PASS){
+   currentUser={role:'admin'};
+   openDashboard();
+   return;
+ }
+ const u=users.find(x=>x.email===e && x.pass===p);
+ if(!u) return alert('Invalid login');
+ currentUser={email:e,role:'agent',name:u.name};
+ openDashboard();
 }
-function loadOrders(){
-  const orders=JSON.parse(localStorage.getItem("orders"))||[];
-  orderList.innerHTML="";
-  orders.forEach(o=>{orderList.innerHTML+=`<div style="border-bottom:1px solid #ddd;padding:6px 0"><b>${o.network}</b> - ${o.package}<br>${o.phone}<br><small>${o.date}</small></div>`});
-  totalOrders.innerText=orders.length;
+
+function openDashboard(){
+ go('dashboard');
+ if(currentUser.role==='admin'){
+   adminPanel.style.display='block';
+   viewAgentsBtn.style.display='inline-block';
+ } else {
+   adminPanel.style.display='none';
+   viewAgentsBtn.style.display='none';
+ }
+ showAgentOrders();
 }
-function saveUsers(){const users=JSON.parse(localStorage.getItem("users"))||[]; users.forEach(u=>{if(u.email===currentUser.email) u.balance=currentUser.balance;}); localStorage.setItem("users",JSON.stringify(users)); totalAgents.innerText=users.length;}
+
+function logout(){currentUser=null;go('landing');}
+
+// Render Networks
+function renderNetworks(){
+ networks.innerHTML='';
+ Object.keys(prices).forEach(n=>{
+   let d=document.createElement('div');
+   d.className='network';
+   d.textContent=n;
+   d.onclick=()=>selectNetwork(n,d);
+   networks.appendChild(d);
+ });
+ selectedNetwork='';
+ cPackage.innerHTML='<option value="">Select Package</option>';
+}
+
+function selectNetwork(n,el){
+ selectedNetwork=n;
+ document.querySelectorAll('.network').forEach(x=>x.classList.remove('active'));
+ el.classList.add('active');
+ cPackage.innerHTML='<option value="">Select Package</option>';
+ Object.entries(prices[n]).forEach(([g,p])=>{
+   let o=document.createElement('option');
+   o.value=g;
+   o.textContent=`${g}GB - GHS ${p}`;
+   cPackage.appendChild(o);
+ });
+}
+
+// Customer Payment
+function payCustomer(){
+ const phone=cPhone.value.trim(),pack=cPackage.value;
+ if(!/^0\d{9}$/.test(phone) || !selectedNetwork || !pack) return alert('Fill required fields');
+ const price=prices[selectedNetwork][pack];
+ PaystackPop.setup({
+   key:PAYSTACK_KEY,
+   email:'customer@aspierrowdata.com',
+   amount:price*100,
+   currency:'GHS',
+   callback:()=>{
+     orders.push({email:currentUser?.email||'customer',network:selectedNetwork,package:pack,phone,price,status:'Pending',date:new Date().toLocaleString()});
+     localStorage.setItem('orders',JSON.stringify(orders));
+     alert('Order placed');
+     // WhatsApp
+     let msg=`ASPIERROWDATA ORDER\nNetwork:${selectedNetwork}\nPackage:${pack}GB\nPhone:${phone}`;
+     window.open(`https://wa.me/233591467262?text=${encodeURIComponent(msg)}`,'_blank');
+   }
+ }).openIframe();
+}
+
+// AFA Payment
+function payAFA(){
+ if(!afaName.value || !afaPhone.value || !afaGhana.value) return alert('Fill all fields');
+ PaystackPop.setup({
+   key:PAYSTACK_KEY,
+   email:'afa@aspierrowdata.com',
+   amount:2000,
+   currency:'GHS',
+   callback:()=>{alert('AFA Registration Successful');}
+ }).openIframe();
+}
+
+// Show agent orders
+function showAgentOrders(){
+ let h='<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Phone</th><th>Status</th></tr>';
+ orders.filter(o=>currentUser.role==='admin'||o.email===currentUser.email)
+ .forEach(o=>{
+   h+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>${o.phone}</td><td class="status-${o.status.toLowerCase()}">${o.status}</td></tr>`;
+ });
+ h+='</table>';
+ agentOrders.innerHTML=h;
+ adminOrders.innerHTML=h;
+}
+
+// Export orders to CSV
+function exportExcel(){
+ let csv='Date,Network,Package,Phone,Status\n';
+ orders.forEach(o=>csv+=`${o.date},${o.network},${o.package}GB,${o.phone},${o.status}\n`);
+ let a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([csv]));
+ a.download='orders.csv';
+ a.click();
+}
+
+// Admin view agents
+function showAgents(){
+ let h='<table><tr><th>Name</th><th>Phone</th><th>Email</th></tr>';
+ users.forEach(u=>h+=`<tr><td>${u.name}</td><td>${u.phone}</td><td>${u.email}</td></tr>`);
+ h+='</table>';
+ agentsTable.innerHTML=h;
+ agentsList.style.display='block';
+}
+
 </script>
 </body>
 </html>
