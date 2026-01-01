@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>ASPIERROW DATA GH</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8" />
+<title>Aspierrowdata</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <style>
-:root {
+:root{
   --blue:#007bff;
   --gold:#f4c430;
   --bg:#f4f6f9;
 }
 *{box-sizing:border-box;font-family:'Montserrat',Arial,sans-serif;}
-body{margin:0;background:var(--bg);padding-bottom:90px;}
-.page{display:none;min-height:100vh;justify-content:center;align-items:center;}
+body{margin:0;background:var(--bg);padding-bottom:120px;}
+.page{display:none;min-height:100vh;flex-direction:column;justify-content:center;align-items:center;}
 .page.active{display:flex;}
-.container{width:100%;max-width:600px;padding:20px;display:flex;flex-direction:column;align-items:center;}
-.card{background:#fff;border-radius:12px;padding:25px;width:100%;box-shadow:0 4px 10px rgba(0,0,0,.08);text-align:center;margin-bottom:20px;}
-button{width:100%;padding:12px;border:none;border-radius:8px;margin-top:10px;font-weight:bold;color:#fff;background:var(--blue);cursor:pointer;}
+.container{width:100%;max-width:500px;padding:20px;}
+.card{background:#fff;border-radius:12px;padding:25px;box-shadow:0 4px 10px rgba(0,0,0,.08);width:100%;text-align:center;}
+h1,h2,h3{margin:10px 0;}
+button{background:var(--blue);color:#fff;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;margin:8px 0;width:100%;font-weight:bold;}
 button.gold{background:var(--gold);color:#000;}
-input,select{width:100%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:6px;}
-.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:15px;}
-.network{border:2px solid var(--blue);padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;text-align:center;}
+input,select{width:100%;padding:10px;margin:6px 0;border-radius:6px;border:1px solid #ccc;}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;margin:15px 0;}
+.network{border:2px solid var(--blue);padding:12px;border-radius:10px;font-weight:bold;cursor:pointer;}
 .network.active{background:var(--blue);color:#fff;}
 .back-btn{position:absolute;top:15px;left:15px;background:#ddd;padding:6px 12px;border-radius:6px;cursor:pointer;}
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;}
-th,td{padding:8px;border-bottom:1px solid #ddd;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;}
+th,td{padding:8px;border-bottom:1px solid #ddd;text-align:center;}
 th{background:#eef2ff;}
 .status-pending{color:orange;font-weight:bold;}
 .status-delivered{color:green;font-weight:bold;}
@@ -38,80 +39,71 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#fff;text-align:cent
 
 <!-- LANDING -->
 <div id="page-landing" class="page active">
-  <div class="container">
-    <div class="card">
-      <h1 style="color:var(--blue)">ASPIERROW DATA GH</h1>
-      <p><b>Affordable • Fast Delivery • Reliable</b></p>
-      <button onclick="go('buy')">Buy Data</button>
-      <button class="gold" onclick="go('afa')">AFA Registration</button>
-      <button onclick="go('login')">Login / Create Account</button>
-    </div>
+  <div class="container card">
+    <h1 style="color:var(--blue)">ASPIERROW DATA GH</h1>
+    <p><b>Affordable • Fast • Reliable</b></p>
+    <button onclick="go('buy')">Buy Data</button>
+    <button class="gold" onclick="go('afa')">AFA Registration</button>
+    <button onclick="go('login')">Login / Create Account</button>
   </div>
 </div>
 
 <!-- LOGIN -->
 <div id="page-login" class="page">
   <span class="back-btn" onclick="go('landing')">← Back</span>
-  <div class="container">
-    <div class="card">
-      <h2>Agent Login</h2>
-      <input id="loginEmail" type="email" placeholder="Email" required>
-      <input id="loginPass" type="password" placeholder="Password" required>
-      <button onclick="login()">Login</button>
-      <p>New agent? <a href="#" onclick="go('register')">Create account</a></p>
-    </div>
+  <div class="container card">
+    <h2>Agent Login</h2>
+    <input id="loginEmail" placeholder="Email" required>
+    <input id="loginPass" type="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <p>New agent? <a href="#" onclick="go('register')">Create account</a></p>
   </div>
 </div>
 
 <!-- REGISTER -->
 <div id="page-register" class="page">
   <span class="back-btn" onclick="go('login')">← Back</span>
-  <div class="container">
-    <div class="card">
-      <h2>Create Agent Account</h2>
-      <input id="regName" placeholder="Full Name" required>
-      <input id="regPhone" placeholder="Phone Number" required>
-      <input id="regEmail" type="email" placeholder="Email" required>
-      <input id="regPass" type="password" placeholder="Password" required>
-      <input id="regConfirm" type="password" placeholder="Confirm Password" required>
-      <button onclick="register()">Create Account</button>
-    </div>
+  <div class="container card">
+    <h2>Create Agent Account</h2>
+    <input id="regName" placeholder="Full Name" required>
+    <input id="regPhone" placeholder="Phone Number" required>
+    <input id="regEmail" placeholder="Email" required>
+    <input id="regPass" type="password" placeholder="Password" required>
+    <input id="regConfirm" type="password" placeholder="Confirm Password" required>
+    <button onclick="register()">Create Account</button>
   </div>
 </div>
 
-<!-- BUY DATA / AGENT -->
+<!-- BUY DATA -->
 <div id="page-buy" class="page">
   <span class="back-btn" onclick="go('landing')">← Back</span>
-  <div class="container">
-    <div class="card">
-      <h2>Buy Data</h2>
-      <input id="cPhone" placeholder="Beneficiary Number" required>
-      <div id="networks" class="grid"></div>
-      <div id="packageGrid" class="grid"></div>
-      <select id="paymentMethod" required>
-        <option value="">Select Payment Method</option>
-        <option value="paystack">Paystack</option>
-        <option value="wallet">Wallet</option>
-      </select>
-      <p>Wallet Balance: GHS <span id="walletBalance">0</span></p>
-      <button onclick="payCustomer()">Pay / Top Up</button>
-      <h3>Order History</h3>
-      <div id="customerOrders"></div>
-    </div>
+  <div class="container card">
+    <h2>Buy Data</h2>
+    <input id="cPhone" placeholder="Beneficiary Number (0XXXXXXXXX)" required>
+    <h4>Network</h4>
+    <div id="networks" class="grid"></div>
+    <h4>Package</h4>
+    <div id="packageGrid" class="grid"></div>
+    <select id="paymentMethod">
+      <option value="paystack">Paystack</option>
+      <option value="wallet">Wallet</option>
+    </select>
+    <button onclick="payCustomer()">Pay</button>
+    <h4>Wallet Balance: GHS <span id="walletBalance">0</span></h4>
+    <h3>Order History</h3>
+    <div id="customerOrders"></div>
   </div>
 </div>
 
 <!-- AFA -->
 <div id="page-afa" class="page">
   <span class="back-btn" onclick="go('landing')">← Back</span>
-  <div class="container">
-    <div class="card">
-      <h2>AFA Registration</h2>
-      <input id="afaName" placeholder="Full Name" required>
-      <input id="afaPhone" placeholder="Phone Number" required>
-      <input id="afaGhana" placeholder="Ghana Card Number" required>
-      <button onclick="payAFA()">Pay GHS 20</button>
-    </div>
+  <div class="container card">
+    <h2>AFA Registration</h2>
+    <input id="afaName" placeholder="Full Name" required>
+    <input id="afaPhone" placeholder="Phone Number" required>
+    <input id="afaGhana" placeholder="Ghana Card Number" required>
+    <button onclick="payAFA()">Pay GHS 20</button>
   </div>
 </div>
 
@@ -119,262 +111,221 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:#fff;text-align:cent
 <div id="page-dashboard" class="page">
   <span class="back-btn" onclick="go('landing')">← Back</span>
   <div class="container">
-    <div class="card">
-      <button onclick="showAgentOrders()">My Orders</button>
+    <div id="agentPanel" class="card" style="display:none">
+      <h2>Agent Dashboard</h2>
+      <button onclick="go('buy')">Buy Data</button>
+      <h4>Wallet Balance: GHS <span id="agentWallet">0</span></h4>
+      <button onclick="showAgentOrders()">Order History</button>
       <button onclick="logout()">Logout</button>
-      <button id="viewAgentsBtn" class="gold" onclick="showAgents()" style="display:none">View Agents</button>
-      <button id="priceCtrlBtn" class="gold" onclick="showPriceControl()" style="display:none">Manage Prices</button>
     </div>
-
-    <div id="agentOrders" class="card"></div>
-
-    <!-- Admin Panel -->
     <div id="adminPanel" class="card" style="display:none">
-      <h3>Admin Dashboard</h3>
-      <button class="gold" onclick="exportExcel()">Export Orders</button>
-      <div id="adminOrders"></div>
-
-      <div id="orderHistoryPanel" style="margin-top:20px">
-        <h3>Order History</h3>
-        <div id="orderHistoryTable"></div>
-      </div>
-
-      <div id="agentsList" class="card" style="display:none">
-        <h3>Agents</h3>
-        <div id="agentsTable"></div>
-      </div>
-
-      <div id="priceControl" class="card" style="display:none">
-        <h3>Price Control</h3>
-        <div id="priceTable"></div>
-      </div>
+      <h2>Admin Dashboard</h2>
+      <button onclick="showAgents()">View Agents</button>
+      <button onclick="showOrders()">Active Orders</button>
+      <button onclick="exportExcel()">Export Orders</button>
+      <h3>Price Control</h3>
+      <div id="priceTable"></div>
+      <h3>Order History</h3>
+      <div id="orderHistoryTable"></div>
     </div>
+    <div id="agentOrdersCard" class="card"></div>
+    <div id="agentsList" class="card"></div>
+    <div id="adminOrdersCard" class="card"></div>
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  © <span id="year"></span> ASPIERROW DATA GH — All Rights Reserved
-</footer>
-
-<!-- WHATSAPP -->
+<!-- Footer & WhatsApp -->
+<footer>© <span id="year"></span> ASPIERROW DATA GH</footer>
 <a class="whatsapp" href="https://wa.me/233591467262" target="_blank">💬</a>
 
 <script>
-// VARIABLES
 const PAYSTACK_KEY="pk_live_9a302e6eefda024c28eb3bc1db61db510e38285e";
 const ADMIN_EMAIL="admin@aspierrowdatagh.com";
 const ADMIN_PASS="admin123";
+
+let pages=document.querySelectorAll('.page');
+let users=JSON.parse(localStorage.getItem('users')||'[]');
+let orders=JSON.parse(localStorage.getItem('orders')||'[]');
+let orderHistory=JSON.parse(localStorage.getItem('orderHistory')||'[]');
+let currentUser=null,selectedNetwork="",selectedPackage="";
+let wallet=JSON.parse(localStorage.getItem('wallet')||'{}');
+
 const prices = {
   MTN:{1:{customer:6,agent:5},2:{customer:12,agent:10},3:{customer:17,agent:15},4:{customer:23,agent:20},5:{customer:27,agent:24},6:{customer:32,agent:28},7:{customer:37,agent:32},8:{customer:42,agent:36},9:{customer:46,agent:40},10:{customer:50,agent:45},15:{customer:75,agent:70},20:{customer:95,agent:88},25:{customer:115,agent:105},30:{customer:135,agent:125},40:{customer:175,agent:165},50:{customer:215,agent:205},100:{customer:420,agent:400}},
   TELECEL:{5:{customer:28,agent:25},10:{customer:48,agent:44},15:{customer:73,agent:68},20:{customer:78,agent:72},25:{customer:113,agent:105},30:{customer:133,agent:125},35:{customer:150,agent:140},40:{customer:175,agent:165},45:{customer:195,agent:185},50:{customer:215,agent:205},100:{customer:410,agent:390}},
   AIRTELTIGO:{1:{customer:6,agent:5},2:{customer:11,agent:10},3:{customer:16,agent:14},4:{customer:21,agent:19},5:{customer:26,agent:24},10:{customer:47,agent:44},15:{customer:68,agent:64},20:{customer:83,agent:78}}
 };
-let users=JSON.parse(localStorage.getItem('users')||'[]');
-let orders=JSON.parse(localStorage.getItem('orders')||'[]');
-let orderHistory=JSON.parse(localStorage.getItem('orderHistory')||'[]');
-let currentUser=null;
-let selectedNetwork="",selectedPackage="";
-let walletBalance=0;
 
-// UTILITY
-document.getElementById('year').innerText=new Date().getFullYear();
+// --- Navigation ---
 function go(p){
-  pages.forEach(pg=>pg.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  if(p==='buy'){ renderNetworks(); renderCustomerOrders(); updateWallet(); }
+ pages.forEach(pg=>pg.classList.remove('active'));
+ document.getElementById('page-'+p).classList.add('active');
+ if(p==='buy') renderNetworks();
+ if(p==='buy') renderCustomerOrders();
+ if(currentUser && currentUser.role==='agent') document.getElementById('agentWallet').innerText = wallet[currentUser.email]||0;
 }
 
-// REGISTER
+// --- Agent Registration ---
 function register(){
-  if(!regName.value||!regPhone.value||!regEmail.value||!regPass.value||!regConfirm.value) return alert("Fill all fields");
-  if(regPass.value!==regConfirm.value) return alert("Passwords do not match");
-  users.push({name:regName.value,phone:regPhone.value,email:regEmail.value,pass:regPass.value,wallet:0});
-  localStorage.setItem('users',JSON.stringify(users));
-  alert("Account created");
-  go('login');
+ if(!regName.value||!regPhone.value||!regEmail.value||!regPass.value||!regConfirm.value) return alert("Fill all fields");
+ if(regPass.value!==regConfirm.value) return alert("Passwords do not match");
+ users.push({name:regName.value,email:regEmail.value,phone:regPhone.value,pass:regPass.value});
+ localStorage.setItem('users',JSON.stringify(users));
+ alert("Account created"); go('login');
 }
 
-// LOGIN
+// --- Login ---
 function login(){
-  const e=loginEmail.value,p=loginPass.value;
-  if(e===ADMIN_EMAIL&&p===ADMIN_PASS){currentUser={role:'admin'};openDashboard();return;}
-  const u=users.find(x=>x.email===e && x.pass===p);
-  if(!u) return alert("Invalid login");
-  currentUser={...u,role:'agent'};
-  walletBalance=u.wallet||0;
-  openDashboard();
+ const e=loginEmail.value,p=loginPass.value;
+ if(e===ADMIN_EMAIL && p===ADMIN_PASS){
+   currentUser={role:'admin'}; openDashboard(); return;
+ }
+ const u=users.find(x=>x.email===e && x.pass===p);
+ if(!u) return alert("Invalid login");
+ currentUser={role:'agent',email:e,name:u.name}; if(!wallet[e]) wallet[e]=0; localStorage.setItem('wallet',JSON.stringify(wallet));
+ openDashboard();
 }
 
-// DASHBOARD
 function openDashboard(){
-  go('dashboard');
-  if(currentUser.role==='admin'){
-    adminPanel.style.display='block';
-    viewAgentsBtn.style.display='inline-block';
-    priceCtrlBtn.style.display='inline-block';
-    showAgents();
-    renderPriceControl();
-    renderOrderHistory();
-  }else{
-    adminPanel.style.display='none';
-    viewAgentsBtn.style.display='none';
-    priceCtrlBtn.style.display='none';
-    showAgentOrders();
-  }
+ go('dashboard');
+ document.getElementById('agentPanel').style.display = currentUser.role==='agent'?'block':'none';
+ document.getElementById('adminPanel').style.display = currentUser.role==='admin'?'block':'none';
+ renderOrderHistory(); renderPriceControl(); showAgentOrders();
+ document.getElementById('agentWallet').innerText = wallet[currentUser.email]||0;
 }
 
-// LOGOUT
-function logout(){currentUser=null;go('landing');}
+// --- Logout ---
+function logout(){currentUser=null; go('landing');}
 
-// NETWORKS
+// --- Render Networks ---
 function renderNetworks(){
-  networks.innerHTML="";
-  Object.keys(prices).forEach(n=>{
-    let d=document.createElement('div');
-    d.className='network';
-    d.innerText=n;
-    d.onclick=()=>selectNetwork(n,d);
-    networks.appendChild(d);
-  });
-  packageGrid.innerHTML="";
+ const grid=document.getElementById('networks');
+ const packGrid=document.getElementById('packageGrid');
+ grid.innerHTML=""; packGrid.innerHTML="";
+ Object.keys(prices).forEach(n=>{
+   let d=document.createElement('div'); d.className='network'; d.innerText=n;
+   d.onclick=()=>selectNetwork(n,d); grid.appendChild(d);
+ });
+ selectedNetwork=""; selectedPackage="";
 }
+
+// --- Select Network ---
 function selectNetwork(n,el){
-  selectedNetwork=n;
-  document.querySelectorAll('.network').forEach(x=>x.classList.remove('active'));
-  el.classList.add('active');
-  packageGrid.innerHTML="";
-  Object.entries(prices[n]).forEach(([g,p])=>{
-    let b=document.createElement('button');
-    b.className='gold';
-    let price=p.customer;
-    if(currentUser?.role==='agent') price=p.agent;
-    b.innerText=`${g}GB - GHS ${price}`;
-    b.onclick=()=>{selectedPackage=g;};
-    packageGrid.appendChild(b);
-  });
+ selectedNetwork=n; selectedPackage="";
+ document.querySelectorAll('.network').forEach(x=>x.classList.remove('active')); el.classList.add('active');
+ const packGrid=document.getElementById('packageGrid'); packGrid.innerHTML="";
+ Object.entries(prices[n]).forEach(([g,p])=>{
+   let btn=document.createElement('button'); btn.className='gold';
+   let priceDisplay = currentUser?.role==='agent'?p.agent:p.customer;
+   btn.innerText=`${g}GB - GHS ${priceDisplay}`; btn.onclick=()=>selectedPackage=g;
+   packGrid.appendChild(btn);
+ });
 }
 
-// PAYMENT
-function updateWallet(){
-  document.getElementById('walletBalance').innerText=walletBalance;
-}
+// --- Pay Customer ---
 function payCustomer(){
-  if(!selectedNetwork||!selectedPackage||!paymentMethod.value) return alert("Select network, package, and payment method");
-  let price=currentUser.role==='agent'?prices[selectedNetwork][selectedPackage].agent:prices[selectedNetwork][selectedPackage].customer;
-  if(paymentMethod.value==='wallet'){
-    if(walletBalance<price) return alert("Insufficient wallet balance");
-    walletBalance-=price;
-    currentUser.wallet=walletBalance;
-    users=users.map(u=>u.email===currentUser.email?currentUser:u);
-    localStorage.setItem('users',JSON.stringify(users));
-    alert(`Paid GHS ${price} from wallet`);
-  }else{
-    PaystackPop.setup({
-      key:PAYSTACK_KEY,
-      email:"customer@aspierrowdata.com",
-      amount:price*100,
-      currency:"GHS",
-      callback:()=>{ alert(`Paid GHS ${price} via Paystack`); }
-    }).openIframe();
-  }
-  // Save order
-  orders.push({email:currentUser.email,network:selectedNetwork,package:selectedPackage,price,status:'Pending',date:new Date().toLocaleString()});
-  localStorage.setItem('orders',JSON.stringify(orders));
-  renderCustomerOrders();
-  updateWallet();
+ if(!selectedNetwork||!selectedPackage) return alert("Select network & package");
+ let method = document.getElementById('paymentMethod').value;
+ let amount = currentUser?.role==='agent'?prices[selectedNetwork][selectedPackage].agent:prices[selectedNetwork][selectedPackage].customer;
+ if(method==='wallet'){
+   if(wallet[currentUser.email]<amount) return alert("Insufficient wallet balance");
+   wallet[currentUser.email]-=amount; localStorage.setItem('wallet',JSON.stringify(wallet));
+   alert("Payment successful via wallet"); renderCustomerOrders();
+ } else {
+   PaystackPop.setup({
+     key:PAYSTACK_KEY,email:currentUser?.email||"customer@aspierrowdata.com",
+     amount:amount*100,currency:"GHS",
+     callback:()=>{
+       alert("Payment successful"); 
+       renderCustomerOrders();
+     }
+   }).openIframe();
+ }
+ orders.push({email:currentUser?.email||'customer',network:selectedNetwork,package:selectedPackage,price:amount,date:new Date().toLocaleString(),status:"Delivered"});
+ localStorage.setItem('orders',JSON.stringify(orders));
+ renderCustomerOrders(); document.getElementById('walletBalance').innerText = wallet[currentUser.email]||0;
 }
 
-// ORDER HISTORY
+// --- Render Order History ---
 function renderCustomerOrders(){
-  if(!currentUser) return;
-  let h='<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Price</th><th>Status</th></tr>';
-  orders.filter(o=>o.email===currentUser.email).forEach(o=>{
-    h+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>GHS ${o.price}</td><td class="status-${o.status.toLowerCase()}">${o.status}</td></tr>`;
-  });
-  customerOrders.innerHTML=h+'</table>';
+ if(!currentUser) return;
+ let list=orders.filter(o=>o.email===currentUser.email); 
+ let html="<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Price</th><th>Status</th></tr>";
+ list.forEach(o=>html+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>GHS ${o.price}</td><td class="status-${o.status.toLowerCase()}">${o.status}</td></tr>`);
+ html+="</table>"; document.getElementById('customerOrders').innerHTML=html;
+ showAgentOrders();
+ renderOrderHistory();
 }
 
-// AGENT ORDERS (ADMIN VIEW)
-function showAgentOrders(){
-  let h='<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Price</th><th>Status</th></tr>';
-  orders.filter(o=>currentUser.role==='admin'||o.email===currentUser.email).forEach(o=>{
-    h+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>GHS ${o.price}</td><td class="status-${o.status.toLowerCase()}">${o.status}</td></tr>`;
-  });
-  agentOrders.innerHTML=h+'</table>';
-  adminOrders.innerHTML=h+'</table>';
-}
-
-// EXPORT ORDERS
-function exportExcel(){
-  if(orders.length===0) return alert("No orders to export!");
-  let csv='Date,Network,Package,Price,Status\n';
-  orders.forEach(o=>csv+=`${o.date},${o.network},${o.package}GB,${o.price},${o.status}\n`);
-  orderHistory=orderHistory.concat(orders);
-  localStorage.setItem('orderHistory',JSON.stringify(orderHistory));
-  orders=[]; localStorage.setItem('orders',JSON.stringify(orders));
-  showAgentOrders();
-  let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv])); a.download='orders.csv'; a.click();
-  renderOrderHistory();
-  alert("Orders exported and reset. History saved.");
-}
-function renderOrderHistory(){
-  if(orderHistory.length===0){ orderHistoryTable.innerHTML="<p>No past orders.</p>"; return; }
-  let h='<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Price</th><th>Status</th></tr>';
-  orderHistory.forEach(o=>{h+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>GHS ${o.price}</td><td class="status-${o.status.toLowerCase()}">${o.status}</td></tr>`;});
-  orderHistoryTable.innerHTML=h+'</table>';
-}
-
-// ADMIN FUNCTIONS
+// --- Admin: Show Agents ---
 function showAgents(){
-  agentsList.style.display='block';
-  let h='<table><tr><th>Name</th><th>Phone</th><th>Email</th><th>Wallet</th></tr>';
-  users.forEach(u=>{h+=`<tr><td>${u.name}</td><td>${u.phone}</td><td>${u.email}</td><td>GHS ${u.wallet||0}</td></tr>`;});
-  agentsTable.innerHTML=h+'</table>';
+ let html="<table><tr><th>Name</th><th>Email</th><th>Phone</th><th>Wallet</th></tr>";
+ users.forEach(u=>html+=`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td><td>GHS ${wallet[u.email]||0}</td></tr>`);
+ html+="</table>"; document.getElementById('agentsList').innerHTML=html;
 }
 
-// PRICE CONTROL
-function showPriceControl(){ priceControl.style.display='block'; renderPriceControl(); }
+// --- Admin: Active Orders ---
+function showOrders(){
+ let html="<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Price</th><th>Status</th></tr>";
+ orders.forEach(o=>html+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>GHS ${o.price}</td><td>${o.status}</td></tr>`);
+ html+="</table>"; document.getElementById('adminOrdersCard').innerHTML=html;
+}
+
+// --- Export CSV ---
+function exportExcel(){
+ if(orders.length===0) return alert("No orders to export!");
+ let csv='Date,Network,Package,Price,Status\n';
+ orders.forEach(o=>csv+=`${o.date},${o.network},${o.package}GB,${o.price},${o.status}\n`);
+ orderHistory = orderHistory.concat(orders); localStorage.setItem('orderHistory',JSON.stringify(orderHistory));
+ orders=[]; localStorage.setItem('orders',JSON.stringify(orders)); showOrders(); renderOrderHistory();
+ let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv])); a.download='orders.csv'; a.click();
+ alert("Orders exported and reset. History saved.");
+}
+
+// --- Render Order History ---
+function renderOrderHistory(){
+ if(orderHistory.length===0){document.getElementById('orderHistoryTable').innerHTML="<p>No past orders.</p>"; return;}
+ let html="<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Price</th><th>Status</th></tr>";
+ orderHistory.forEach(o=>html+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>GHS ${o.price}</td><td>${o.status}</td></tr>`);
+ html+="</table>"; document.getElementById('orderHistoryTable').innerHTML=html;
+}
+
+// --- Admin: Price Control ---
 function renderPriceControl(){
-  let h='<table><tr><th>Network</th><th>Package</th><th>Customer Price</th><
-<th>Agent Price</th></tr>';
-  Object.keys(prices).forEach(net=>{
-    Object.keys(prices[net]).forEach(pkg=>{
-      h+=`<tr>
-        <td>${net}</td>
-        <td>${pkg}GB</td>
-        <td><input type="number" value="${prices[net][pkg].customer}" onchange="updatePrice('${net}','${pkg}','customer',this.value)"></td>
-        <td><input type="number" value="${prices[net][pkg].agent}" onchange="updatePrice('${net}','${pkg}','agent',this.value)"></td>
-      </tr>`;
-    });
-  });
-  priceTable.innerHTML=h+'</table>';
+ let html="<table><tr><th>Network</th><th>Package</th><th>Customer Price</th><th>Agent Price</th></tr>";
+ Object.keys(prices).forEach(net=>Object.keys(prices[net]).forEach(pkg=>{
+   html+=`<tr><td>${net}</td><td>${pkg}GB</td>
+   <td><input type="number" value="${prices[net][pkg].customer}" onchange="updatePrice('${net}','${pkg}','customer',this.value)"></td>
+   <td><input type="number" value="${prices[net][pkg].agent}" onchange="updatePrice('${net}','${pkg}','agent',this.value)"></td></tr>`;
+ }));
+ html+="</table>"; document.getElementById('priceTable').innerHTML=html;
 }
+
 function updatePrice(net,pkg,type,value){
-  if(!value || value<0) return alert("Invalid price");
-  prices[net][pkg][type]=Number(value);
-  alert(`${type} price for ${net} ${pkg}GB updated to GHS ${value}`);
-  // Refresh agent view if necessary
-  if(currentUser.role==='agent' && selectedNetwork===net) selectNetwork(net,document.querySelector(`.network.active`));
+ if(!value || value<0) return alert("Invalid price");
+ prices[net][pkg][type]=Number(value); alert(`${type} price for ${net} ${pkg}GB updated to GHS ${value}`);
+ renderNetworks(); renderPriceControl(); renderCustomerOrders();
 }
 
-// SHOW PAYMENT OPTIONS
-// Already handled in payCustomer with select#paymentMethod
+// --- Agent Orders Panel ---
+function showAgentOrders(){
+ if(currentUser?.role!=='agent') return;
+ let list=orders.filter(o=>o.email===currentUser.email);
+ let html="<table><tr><th>Date</th><th>Network</th><th>Package</th><th>Price</th><th>Status</th></tr>";
+ list.forEach(o=>html+=`<tr><td>${o.date}</td><td>${o.network}</td><td>${o.package}GB</td><td>GHS ${o.price}</td><td>${o.status}</td></tr>`);
+ html+="</table>"; document.getElementById('agentOrdersCard').innerHTML=html;
+}
 
-// AFA PAYMENT
+// --- AFA Payment ---
 function payAFA(){
-  if(!afaName.value||!afaPhone.value||!afaGhana.value) return alert("Fill all fields");
-  PaystackPop.setup({
-    key:PAYSTACK_KEY,
-    email:"afa@aspierrowdata.com",
-    amount:2000,
-    currency:"GHS",
-    callback:()=>alert("AFA Registration Successful")
-  }).openIframe();
+ if(!afaName.value||!afaPhone.value||!afaGhana.value) return alert("Fill all fields");
+ PaystackPop.setup({
+   key:PAYSTACK_KEY,email:"afa@aspierrowdata.com",amount:2000,currency:"GHS",
+   callback:()=>alert("AFA Registration Successful")
+ }).openIframe();
 }
 
-// INITIAL LOAD
-renderOrderHistory();
+document.getElementById('year').innerText = new Date().getFullYear();
 </script>
 
 </body>
